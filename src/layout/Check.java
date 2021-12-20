@@ -13,7 +13,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+
 
 public class Check extends JFrame implements ActionListener {
     private JPanel mainPanel;
@@ -37,9 +37,10 @@ public class Check extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()== buttonSample){
             System.out.println("Hello world");
-            jo.put("firstName","John");
+            jo.put("number","00001");
             try {
-                PrintWriter pw = new PrintWriter("JSONExample.json");
+              //  PrintWriter pw = new PrintWriter("JSONExample.json");
+                PrintWriter pw = new PrintWriter("data/invoce.json");
                 pw.write(jo.toJSONString());
                 pw.flush();
                 pw.close();
