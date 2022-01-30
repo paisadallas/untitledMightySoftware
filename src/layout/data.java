@@ -1,13 +1,18 @@
 package layout;
 
+import javafx.scene.control.TableCell;
+import org.json.simple.parser.ParseException;
+
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -26,11 +31,7 @@ public class data extends JFrame implements ActionListener {
     private JPanel mainPanel;
     private JTable tableProducts;
     private JButton addButton;
-    private JFormattedTextField textCode;
-    private JFormattedTextField textDescription;
-    private JFormattedTextField textCondition;
-    private JTextField textUnitPrice;
-    private JFormattedTextField textPrice;
+
     private JButton deleteButton;
     private JLabel imageLogo;
     private JFormattedTextField textLabor;
@@ -51,61 +52,112 @@ public class data extends JFrame implements ActionListener {
     private  float tax = (float) 0.0825;
     PrinterJob job = PrinterJob.getPrinterJob();
 
-    class HelloWorldPrinter implements Printable, ActionListener {
-        ImageIcon printImage = new javax.swing.ImageIcon("logo.jpg");
-        @Override
-        public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-            if (pageIndex>0){
-                return NO_SUCH_PAGE;
-            }
-
-            Graphics2D g2d = (Graphics2D)graphics;
-            g2d.translate(pageFormat.getImageableX(),pageFormat.getImageableY());
-
-            graphics.drawImage(printImage.getImage(),110,50,null);
-            graphics.drawString("Total $"+String.valueOf(total),100,200);
-            return PAGE_EXISTS;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            PrinterJob job = PrinterJob.getPrinterJob();
-            job.setPrintable(this);
-            boolean ok = job.printDialog();
-            if (ok) {
-                try {
-                    job.print();
-                } catch (PrinterException ex) {
-                    /* The job did not successfully complete */
-                }
-            }
-        }
-    }
+//    class HelloWorldPrinter implements Printable, ActionListener {
+//        ImageIcon printImage = new javax.swing.ImageIcon("logo.jpg");
+//        @Override
+//        public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+//            if (pageIndex>0){
+//                return NO_SUCH_PAGE;
+//            }
+//
+//            Graphics2D g2d = (Graphics2D)graphics;
+//            g2d.translate(pageFormat.getImageableX(),pageFormat.getImageableY());
+//
+//            graphics.drawImage(printImage.getImage(),110,50,null);
+//            graphics.drawString("Total $"+String.valueOf(total),100,200);
+//            return PAGE_EXISTS;
+//        }
+//
+//        @Override
+//        public void actionPerformed(ActionEvent e) {
+//            PrinterJob job = PrinterJob.getPrinterJob();
+//            job.setPrintable(this);
+//            boolean ok = job.printDialog();
+//            if (ok) {
+//                try {
+//                    job.print();
+//
+//                } catch (PrinterException ex) {
+//                    /* The job did not successfully complete */
+//                }
+//            }
+//        }
+//    }
 
     //CONSTRUCTOR
-    public data(){
+    public data()  {
 
-
+        TableOperator tableOperator = new TableOperator();
         setContentPane(mainPanel);
         setTitle("Mighty Care Care Center");
         setSize(1200,1100);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         printButton.setEnabled(false);
         addButton.addActionListener(this);
-        printButton.addActionListener(new Printer());
+      //  printButton.addActionListener(new Printer());
+        printButton.addActionListener(this);
         saveButton.addActionListener(this);
         deleteButton.addActionListener(this);
-        readTable.addActionListener(this);
-        String[]  columnNames = {"Qty Code/ Tech","Description","Condition","Unit price","price","Labor","Parts","Shop suplies"};
+//        readTable.addActionListener(this);
+        String[]  columnNames = {"Qty Code/ Tech","Description","Condition","Unit price","Quantity","price","Labor","Shop suplies","tax","total"};
         Object [] [] data = {
         };
         tableModel = new DefaultTableModel(data,columnNames);
         tableProducts.setModel(tableModel);
+        tableModel.insertRow(0,
+                new Object[]{
+
+                });
+
+        //Detect any change
+
+    Object value = "helo";
+
+        tableModel.addTableModelListener(new TableModelListener() {
+
+
+            @Override
+          public void tableChanged(TableModelEvent e) {
+              System.out.println("any change!");
+
+                // tableModel =   tableOperator.getPrice(tableProducts,tableModel);
+                System.out.println(e.getColumn());
+                System.out.println(e.getFirstRow());
+
+                tableModel = tableOperator.getPrice(tableProducts,tableModel,e.getFirstRow(),e.getColumn());
+
+          }
+      });
+/*
+        tableProducts.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
+                System.out.println("press any key!");
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                System.out.println("pressed Enter!");
+            }
+        });
+*/
+
+
+
+
+
+  //tableModel.setValueAt("hola",0,0);
+
+
+
+
+
+        //detected v2
 
         setVisible(true);
     }
-
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -114,14 +166,7 @@ public class data extends JFrame implements ActionListener {
          WriteData wd = new WriteData();
         if(e.getSource()== saveButton){
             printButton.setEnabled(true);
-            wd.name="PEPE";
-            wd.email="carlitos@gmail.com";
-            wd.phone="311545538";
-            wd.address="calle 85#225";
-            wd.vin="corolla 2000";
-            wd.car="camaro";
-            wd.miles="598645";
-            wd.tag="55VDS";
+
            // wd.addInfo();
             wd.addCustomer();
             wd.writeData();
@@ -132,6 +177,8 @@ public class data extends JFrame implements ActionListener {
 //            System.out.println("Read");
 //            ReadData rd = new ReadData();
 //            rd.read();
+
+            tableModel.setValueAt("valor",0,0);
 
         }
 
@@ -144,24 +191,16 @@ public class data extends JFrame implements ActionListener {
 
             tableModel.insertRow(rowsTable,
                     new Object[]{
-                            textCode.getText(),
-                            textDescription.getText(),
-                            textCondition.getText(),
-                            textUnitPrice.getText(),
-                            textPrice.getText(),
-                            textLabor.getText(),
-                            textParts.getText(),
-                            textShopSuplies.getText()
                     });
 
-            addData(textPrice.getText(),textLabor.getText(),textParts.getText(),textShopSuplies.getText());
+
             cleanData();
 
             Object [] row = new Object[4];
             System.out.println(rowsTable);
         }
 
-        if(e.getSource()==readTable){
+        if(e.getSource()==saveButton){
             System.out.println("readTABEL");
             //Write table
             for (int row=0;row < tableProducts.getRowCount(); row++){
@@ -210,7 +249,19 @@ public class data extends JFrame implements ActionListener {
             wd.writeData();
         }
 
+        if(e.getSource()==printButton){
+            try {
+                Printer printer = new Printer();
+                printer.actionPerformed(e);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            } catch (ParseException parseException) {
+                parseException.printStackTrace();
+            }
         }
+        }
+
+
 
 
     private void addData(String textPriceText, String textLaborText, String textPartsText, String textShopSuplies) {
@@ -221,14 +272,8 @@ public class data extends JFrame implements ActionListener {
     }
 
     private  void cleanData(){
-        textCode.setText("");
-        textDescription.setText("");
-        textCondition.setText("");
-        textUnitPrice.setText("");
-        textPrice.setText("");
-        textLabor.setText("");
-        textParts.setText("");
-        textShopSuplies.setText("");
+
+
 
     }
 

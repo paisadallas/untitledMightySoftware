@@ -1,1 +1,1 @@
-{"invoce":"0001","paid":{"labor":5.0,"parts":5.0,"shopSuplies":5.0,"total less tax":20.0,"price":5.0,"total tax":21.65},"information0":{"qty":"5","condition":"5","price":"5","parts":"5","description":"5","unitPrice":"5","labor":"5","shopSuplies":"5"},"customer":{"name":"5","email":"5","phone":"5","address":"5"},"vehicle":{"vehicle":"5","VIN":"5","miles":"5","tag":"5"}}
+{"invoce":"0001","customer":{"name":null,"email":null,"phone":null,"address":null},"vehicle":{"vehicle":null,"VIN":null,"miles":null,"tag":null}}

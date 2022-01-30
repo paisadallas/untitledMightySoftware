@@ -1,10 +1,13 @@
 package layout;
 
+import org.json.simple.parser.ParseException;
+
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import static com.sun.glass.ui.Cursor.setVisible;
 
@@ -29,7 +32,9 @@ public class home extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == newInvoceButton){
-            data dataUser = new data();
+
+                data dataUser = new data();
+
 
         }
         if(e.getSource() == checkInvoceButton){
