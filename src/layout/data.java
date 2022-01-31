@@ -106,12 +106,12 @@ public class data extends JFrame implements ActionListener {
         tableProducts.setModel(tableModel);
         tableModel.insertRow(0,
                 new Object[]{
-
+                    "","","","0","0","0","0","0","0","0"
                 });
 
         //Detect any change
 
-    Object value = "helo";
+
 
         tableModel.addTableModelListener(new TableModelListener() {
 
@@ -125,7 +125,7 @@ public class data extends JFrame implements ActionListener {
                 System.out.println(e.getFirstRow());
 
                 tableModel = tableOperator.getPrice(tableProducts,tableModel,e.getFirstRow(),e.getColumn());
-
+                tableModel = tableOperator.getTotal(tableProducts,tableModel,e.getFirstRow(),e.getColumn());
           }
       });
 /*
