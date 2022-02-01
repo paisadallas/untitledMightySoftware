@@ -52,42 +52,11 @@ public class data extends JFrame implements ActionListener {
     private  float tax = (float) 0.0825;
     PrinterJob job = PrinterJob.getPrinterJob();
 
-//    class HelloWorldPrinter implements Printable, ActionListener {
-//        ImageIcon printImage = new javax.swing.ImageIcon("logo.jpg");
-//        @Override
-//        public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-//            if (pageIndex>0){
-//                return NO_SUCH_PAGE;
-//            }
-//
-//            Graphics2D g2d = (Graphics2D)graphics;
-//            g2d.translate(pageFormat.getImageableX(),pageFormat.getImageableY());
-//
-//            graphics.drawImage(printImage.getImage(),110,50,null);
-//            graphics.drawString("Total $"+String.valueOf(total),100,200);
-//            return PAGE_EXISTS;
-//        }
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            PrinterJob job = PrinterJob.getPrinterJob();
-//            job.setPrintable(this);
-//            boolean ok = job.printDialog();
-//            if (ok) {
-//                try {
-//                    job.print();
-//
-//                } catch (PrinterException ex) {
-//                    /* The job did not successfully complete */
-//                }
-//            }
-//        }
-//    }
 
     //CONSTRUCTOR
     public data()  {
 
-        TableOperator tableOperator = new TableOperator();
+       TableOperator tableOperator = new TableOperator();
         setContentPane(mainPanel);
         setTitle("Mighty Care Care Center");
         setSize(1200,1100);
@@ -106,7 +75,7 @@ public class data extends JFrame implements ActionListener {
         tableProducts.setModel(tableModel);
         tableModel.insertRow(0,
                 new Object[]{
-                    "","","","0","0","0","0","0","0","0"
+
                 });
 
         //Detect any change
@@ -125,6 +94,7 @@ public class data extends JFrame implements ActionListener {
                 System.out.println(e.getFirstRow());
 
                 tableModel = tableOperator.getPrice(tableProducts,tableModel,e.getFirstRow(),e.getColumn());
+                tableModel = tableOperator.getTax(tableProducts, tableModel, e.getFirstRow(),e.getColumn());
                 tableModel = tableOperator.getTotal(tableProducts,tableModel,e.getFirstRow(),e.getColumn());
           }
       });
@@ -157,7 +127,11 @@ public class data extends JFrame implements ActionListener {
         //detected v2
 
         setVisible(true);
+
+
     }
+
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -259,6 +233,7 @@ public class data extends JFrame implements ActionListener {
                 parseException.printStackTrace();
             }
         }
+
         }
 
 

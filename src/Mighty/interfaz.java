@@ -16,6 +16,7 @@ public class interfaz extends JFrame implements ActionListener {
 
     public interfaz() {
 
+
         setContentPane(mainPanel);
         setTitle("Mighty Care Care Center");
         setSize(400,200);
@@ -33,11 +34,17 @@ public class interfaz extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         if(e.getSource() == button1){
             home open = new home();
             System.out.println("click");
             setVisible(false);
         }
+
+
     }
+
+
+
 }
 
