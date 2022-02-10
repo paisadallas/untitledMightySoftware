@@ -22,16 +22,24 @@ import org.json.simple.parser.*;
 
  public class Printer implements Printable, ActionListener  {
 
+     String  invoce ="",folder="data";
+     public String noInvoce ="";
+
      ImageIcon printImage = new javax.swing.ImageIcon("logo2.jpg");
-     Object object = new JSONParser().parse(new FileReader("data/sample.json"));
-     String invoce;
+
+    // String invoce;
      Map customer,vehicleMap,paidMap,infoMap;
      String name, email,phone, address, vehicle, vin, miles, tag;
      Double labor, parts, shopSuplies,totalLessTax,totalTax;
      int space = 20;
      int spaceX = 275;
      int spaceXtable = 100;
-     public Printer() throws IOException, ParseException {
+     public Printer(String name) throws IOException, ParseException {
+         noInvoce = name;
+         Object object = new JSONParser().parse(new FileReader(folder+"/"+noInvoce));
+         ReadData readData = new ReadData(noInvoce);
+         System.out.println("invoce is = "+ readData.getInvoce());
+         System.out.println("total ="+readData.getName());
          JSONObject jo = (JSONObject) object;
          //Getting invoce
           invoce = (String) jo.get("invoce");
@@ -44,7 +52,7 @@ import org.json.simple.parser.*;
              Map.Entry pair = itr1.next();
              System.out.println(pair.getKey()+ " : "+ pair.getValue());
          vehicleMap = ((Map) jo.get("vehicle"));
-         paidMap = ((Map) jo.get("paid"));
+         paidMap = ((Map) jo.get("information0"));
 
          }
         //CUSTOMER DATA
@@ -61,11 +69,10 @@ import org.json.simple.parser.*;
          tag = (String) vehicleMap.get("tag");
 
          //PAID DATA
-        labor = (Double) paidMap.get("labor");
-        parts = (Double) paidMap.get("parts");
-        shopSuplies = (Double) paidMap.get("shopSuplies");
-        totalLessTax = (Double) paidMap.get("total less tax");
-        totalTax = (Double) paidMap.get("total tax");
+
+       // shopSuplies = (Double) paidMap.get("shopSuplies");
+    //    totalLessTax = (Double) paidMap.get("total less tax");
+    //    totalTax = (Double) paidMap.get("total tax");
      }
 
 
@@ -89,8 +96,8 @@ import org.json.simple.parser.*;
          graphics.drawString("Carrollton, TX 75006",260,70+space);
          graphics.drawString("(972) 820 88 55",268,70+(space*2));
            // graphics.drawString("Total $"+String.valueOf(50000),100,200);
-           graphics.drawString("Invoce #"+invoce,100,200);
-           graphics.drawString("_____________________________________________________________",100,225);
+         graphics.drawString("Invoce #"+invoce,100,200);
+         graphics.drawString("_____________________________________________________________",100,225);
             //CUSTOMER DATA
            graphics.drawString("name:    "+name,100,250);
            graphics.drawString("email:   "+email,100,250+(space));

@@ -1,21 +1,12 @@
 package layout;
 
-import javafx.scene.control.TableCell;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import java.awt.*;
 import java.awt.event.*;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.IOException;
 
@@ -38,18 +29,19 @@ public class data extends JFrame implements ActionListener {
     private JFormattedTextField textParts;
     private JFormattedTextField textShopSuplies;
     private JLabel textSubtotal;
-    private JLabel textTotalTax;
+    private JLabel textTotal;
     private JButton saveButton;
     private JButton printButton;
     private JPanel JPBtnAdd;
     private JPanel JPBtnDelete;
     private JPanel JPCustomer;
     private JPanel JPVehicle;
+    private JLabel textTax;
     private JButton readTable;
     private DefaultTableModel tableModel;
-    private float price;
-    private float total;
-    private  float tax = (float) 0.0825;
+   // private float price;
+
+  //  private  float tax = (float) 0.0825;
     PrinterJob job = PrinterJob.getPrinterJob();
 
 
@@ -61,7 +53,7 @@ public class data extends JFrame implements ActionListener {
         setTitle("Mighty Care Care Center");
         setSize(1200,1100);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        printButton.setEnabled(false);
+        printButton.setEnabled(true);
         addButton.addActionListener(this);
       //  printButton.addActionListener(new Printer());
         printButton.addActionListener(this);
@@ -87,44 +79,18 @@ public class data extends JFrame implements ActionListener {
 
             @Override
           public void tableChanged(TableModelEvent e) {
-              System.out.println("any change!");
 
-                // tableModel =   tableOperator.getPrice(tableProducts,tableModel);
-                System.out.println(e.getColumn());
-                System.out.println(e.getFirstRow());
-
+                //Edit JTable
                 tableModel = tableOperator.getPrice(tableProducts,tableModel,e.getFirstRow(),e.getColumn());
                 tableModel = tableOperator.getTax(tableProducts, tableModel, e.getFirstRow(),e.getColumn());
                 tableModel = tableOperator.getTotal(tableProducts,tableModel,e.getFirstRow(),e.getColumn());
+
+                textTotal.setText(String.valueOf(tableOperator.getAllTotal(tableProducts)));
+                textSubtotal.setText(String.valueOf(tableOperator.getAllSubtotal(tableProducts)));
+                textTax.setText(String.valueOf(tableOperator.getAllTax(tableProducts)));
+
           }
       });
-/*
-        tableProducts.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                super.keyTyped(e);
-                System.out.println("press any key!");
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                super.keyPressed(e);
-                System.out.println("pressed Enter!");
-            }
-        });
-*/
-
-
-
-
-
-  //tableModel.setValueAt("hola",0,0);
-
-
-
-
-
-        //detected v2
 
         setVisible(true);
 
@@ -142,17 +108,16 @@ public class data extends JFrame implements ActionListener {
             printButton.setEnabled(true);
 
            // wd.addInfo();
-            wd.addCustomer();
+          //  wd.addCustomer();
             wd.writeData();
         }
 
         //Read data
         if(e.getSource()==deleteButton){
-//            System.out.println("Read");
-//            ReadData rd = new ReadData();
-//            rd.read();
-
-            tableModel.setValueAt("valor",0,0);
+          //  System.out.println("Read");
+           // ReadData rd = new ReadData();
+          //  rd.read();
+         //   tableModel.setValueAt("valor",0,0);
 
         }
 
@@ -175,57 +140,19 @@ public class data extends JFrame implements ActionListener {
         }
 
         if(e.getSource()==saveButton){
-            System.out.println("readTABEL");
-            //Write table
-            for (int row=0;row < tableProducts.getRowCount(); row++){
-                for(int colum =0 ; colum <= 7;colum++){
-                System.out.print(" "+tableProducts.getValueAt(row,colum));
-                wd.qty= (String) tableProducts.getValueAt(row,0);
-                wd.condition= (String) tableProducts.getValueAt(row,1);
-                wd.price = (String) tableProducts.getValueAt(row,2);
-                wd.parts = (String) tableProducts.getValueAt(row,3);
-                wd.description = (String) tableProducts.getValueAt(row,4);
-                wd.uniPrice = (String) tableProducts.getValueAt(row,5);
-                wd.labor= (String) tableProducts.getValueAt(row,6);
-                wd.shopSuplies= (String) tableProducts.getValueAt(row,7);
-                wd.addInfo(row);
-                }
-                System.out.println("");
-            }
-            //Write paid
 
-            for (int row=0; row < tableProducts.getRowCount(); row++){
-                wd.totalPrice = wd.totalPrice + Float.parseFloat((String) tableProducts.getValueAt(row,6));
-                wd.totalLabor = wd.totalLabor + Float.parseFloat((String) tableProducts.getValueAt(row,5));
-                wd.totalShopSuplies = wd.totalShopSuplies + Float.parseFloat((String) tableProducts.getValueAt(row,7));
-                wd.totalParts = wd.totalParts + Float.parseFloat((String) tableProducts.getValueAt(row,4));
-            }
-            System.out.println("total Price = "+wd.totalPrice);
-            System.out.println("total labor = "+wd.totalLabor);
-            System.out.println("total shopSuplies = "+wd.totalShopSuplies);
-            wd.totalWithoutTax = wd.totalPrice+wd.totalLabor+wd.totalShopSuplies+wd.totalParts;
-            wd.totalWithTax = wd.totalWithoutTax + (wd.totalWithoutTax * tax);
-            System.out.println("total without tax = "+wd.totalWithoutTax);
-            System.out.println("total with tax = "+wd.totalWithTax);
-            wd.addPaid();
-
+            writeTable(wd);
+            writeCustomer(wd);
+            writeTotals(wd,tableProducts);
 
             // ADD Customer
-            wd.name = textName.getText();
-            wd.email=textEmail.getText();
-            wd.phone=textPhone.getText();
-            wd.address=textAddress.getText();
-            wd.vin=textVin.getText();
-            wd.car=textVehicle.getText();
-            wd.miles=textMiles.getText();
-            wd.tag=textTag.getText();
-            wd.addCustomer();
             wd.writeData();
         }
 
         if(e.getSource()==printButton){
             try {
-                Printer printer = new Printer();
+                Printer printer = new Printer("sample.json");
+               // printer.noInvoce = "sample.json";
                 printer.actionPerformed(e);
             } catch (IOException ioException) {
                 ioException.printStackTrace();
@@ -236,16 +163,55 @@ public class data extends JFrame implements ActionListener {
 
         }
 
+    private void writeTable(WriteData writeData){
 
-
-
-    private void addData(String textPriceText, String textLaborText, String textPartsText, String textShopSuplies) {
-        price = price + Float.parseFloat(textPriceText) + Float.parseFloat(textLaborText) + Float.parseFloat(textPartsText) + Float.parseFloat(textShopSuplies);
-         total = price + (float) (price * tax);
-        textSubtotal.setText(String.valueOf(price));
-        textTotalTax.setText(String.valueOf(total));
+        String qty,description,condition,unitPrice,quantity,price,labor,shopSuplies,tax,total;
+        for (int row=0;row < tableProducts.getRowCount(); row++){
+            for(int colum =0 ; colum <= 7;colum++){
+                System.out.print(" "+tableProducts.getValueAt(row,colum));
+                qty= (String) tableProducts.getValueAt(row,0);
+                description= (String) tableProducts.getValueAt(row,1);
+                condition = (String) tableProducts.getValueAt(row,2);
+                unitPrice = (String) tableProducts.getValueAt(row,3);
+                quantity = (String) tableProducts.getValueAt(row,4);
+                price = (String) tableProducts.getValueAt(row,5);
+                labor= (String) tableProducts.getValueAt(row,6);
+                shopSuplies= (String) tableProducts.getValueAt(row,7);
+                tax = (String) tableProducts.getValueAt(row,8);
+                total = (String) tableProducts.getValueAt(row,9);
+                writeData.writeTable(row,qty,description,condition,unitPrice,quantity,price,labor,shopSuplies,tax,total);
+                //wd.addInfo(row);
+            }
+            System.out.println("");
+        }
     }
 
+    private void writeCustomer(WriteData writeData){
+        String name, email,phone,address,vin,car,miles,tag;
+        name = textName.getText();
+        email=textEmail.getText();
+        phone=textPhone.getText();
+        address=textAddress.getText();
+        vin=textVin.getText();
+        car=textVehicle.getText();
+        miles=textMiles.getText();
+        tag=textTag.getText();
+        writeData.addCustomer(name,email,phone,address,car,vin,miles,tag);
+    }
+
+    private void writeTotals(WriteData writeData,JTable tableProducts){
+        TableOperator tableOperator = new TableOperator();
+        String laborTotal="", price="", shopSuplies="",subTotal="", tax ="",total="";
+
+        laborTotal = tableOperator.getAllLabor(tableProducts);
+        price = tableOperator.getAllPrice(tableProducts);
+        shopSuplies = tableOperator.getAllShopSuplies(tableProducts);
+        subTotal = tableOperator.getAllSubtotal(tableProducts);
+        tax = tableOperator.getAllTax(tableProducts);
+        total = tableOperator.getAllTotal(tableProducts);
+
+        writeData.addTotals(laborTotal,price,shopSuplies,subTotal,tax,total);
+    }
     private  void cleanData(){
 
 
