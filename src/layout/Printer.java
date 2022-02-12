@@ -96,25 +96,25 @@ import org.json.simple.parser.*;
          graphics.drawString("Carrollton, TX 75006",260,70+space);
          graphics.drawString("(972) 820 88 55",268,70+(space*2));
            // graphics.drawString("Total $"+String.valueOf(50000),100,200);
-         graphics.drawString("Invoce #"+invoce,100,200);
-         graphics.drawString("_____________________________________________________________",100,225);
+         graphics.drawString("Invoce #"+invoce,100,(space * 7));  //140Y
+         graphics.drawString("_________________________________________________________________",100,(space*8));
             //CUSTOMER DATA
-           graphics.drawString("name:    "+readData.getName(),100,250);
-           graphics.drawString("email:   "+readData.getEmail(),100,250+(space));
-           graphics.drawString("phone:   "+readData.getPhone(),100,250+(space*2));
-           graphics.drawString("Address: "+readData.getAddres(),100,250+(space*3));
+           graphics.drawString("name:    "+readData.getName(),100,(space*9));
+           graphics.drawString("email:   "+readData.getEmail(),100,(space*10));
+           graphics.drawString("phone:   "+readData.getPhone(),100,(space*11));
+           graphics.drawString("Address: "+readData.getAddres(),100,(space*12));
             //VEHICLE DATA
-         graphics.drawString("vehicle:    "+readData.getVehicle(),100+spaceX,250);
-         graphics.drawString("VIN:   "+readData.getVin(),100+spaceX,250+(space));
-         graphics.drawString("miles:   "+readData.getMiles(),100+spaceX,250+(space*2));
-         graphics.drawString("TAG: "+readData.getTag(),100+spaceX,250+(space*3));
-         graphics.drawString("_____________________________________________________________",100,250+(space*4));
+         graphics.drawString("vehicle:    "+readData.getVehicle(),100+spaceX,(space*9));
+         graphics.drawString("VIN:   "+readData.getVin(),100+spaceX,(space*10));
+         graphics.drawString("miles:   "+readData.getMiles(),100+spaceX,(space*11));
+         graphics.drawString("TAG: "+readData.getTag(),100+spaceX,(space*12));
+         graphics.drawString("_________________________________________________________________",100,(space*13));
          //INFORMATION LABEL
-         graphics.drawString("QTY Code",100,250+(space*6));
-         graphics.drawString("Description",100+(spaceXtable),250+(space*6));
-         graphics.drawString("Condition",100+(spaceXtable*2),250+(space*6));
-         graphics.drawString("Unit Price",100+(spaceXtable*3),250+(space*6));
-         graphics.drawString("Price",100+(spaceXtable*4),250+(space*6));
+         graphics.drawString("QTY Code",100,(space*14));
+         graphics.drawString("Description",100+(spaceXtable),(space*14));
+         graphics.drawString("Condition",100+(spaceXtable*2),(space*14));
+         graphics.drawString("Unit Price",100+(spaceXtable*3),(space*14));
+         graphics.drawString("Price",100+(spaceXtable*4),(space*14));
 
 
          //PAID DATA
