@@ -83,7 +83,7 @@ import org.json.simple.parser.*;
      @Override
         public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
 
-
+            ReadData readData = new ReadData(noInvoce);
             if (pageIndex>0){
                 return NO_SUCH_PAGE;
             }
@@ -99,15 +99,15 @@ import org.json.simple.parser.*;
          graphics.drawString("Invoce #"+invoce,100,200);
          graphics.drawString("_____________________________________________________________",100,225);
             //CUSTOMER DATA
-           graphics.drawString("name:    "+name,100,250);
-           graphics.drawString("email:   "+email,100,250+(space));
-           graphics.drawString("phone:   "+phone,100,250+(space*2));
-           graphics.drawString("Address: "+address,100,250+(space*3));
+           graphics.drawString("name:    "+readData.getName(),100,250);
+           graphics.drawString("email:   "+readData.getEmail(),100,250+(space));
+           graphics.drawString("phone:   "+readData.getPhone(),100,250+(space*2));
+           graphics.drawString("Address: "+readData.getAddres(),100,250+(space*3));
             //VEHICLE DATA
-         graphics.drawString("vehicle:    "+vehicle,100+spaceX,250);
-         graphics.drawString("VIN:   "+vin,100+spaceX,250+(space));
-         graphics.drawString("miles:   "+miles,100+spaceX,250+(space*2));
-         graphics.drawString("TAG: "+tag,100+spaceX,250+(space*3));
+         graphics.drawString("vehicle:    "+readData.getVehicle(),100+spaceX,250);
+         graphics.drawString("VIN:   "+readData.getVin(),100+spaceX,250+(space));
+         graphics.drawString("miles:   "+readData.getMiles(),100+spaceX,250+(space*2));
+         graphics.drawString("TAG: "+readData.getTag(),100+spaceX,250+(space*3));
          graphics.drawString("_____________________________________________________________",100,250+(space*4));
          //INFORMATION LABEL
          graphics.drawString("QTY Code",100,250+(space*6));
@@ -118,16 +118,25 @@ import org.json.simple.parser.*;
 
 
          //PAID DATA
-         graphics.drawString("Labor:",375,250+(space*19));
-         graphics.drawString("$"+labor,500,250+(space*19));
-         graphics.drawString("parts:",375,250+(space*20));
-         graphics.drawString("$"+parts,500,250+(space*20));
-         graphics.drawString("Shop Suplies:",375,250+(space*21));
-         graphics.drawString("$"+shopSuplies,500,250+(space*21));
-         graphics.drawString("Subtotal:",375,250+(space*22));
-         graphics.drawString("$"+totalLessTax,500,250+(space*22));
-         graphics.drawString("Total:",375,250+(space*24));
-         graphics.drawString("$"+totalTax,500,250+(space*24));
+         graphics.drawString("Labor:",375,250+(space*17));
+         graphics.drawString("$"+readData.getLabor(),500,250+(space*17));
+
+         graphics.drawString("parts:",375,250+(space*18));
+         graphics.drawString("$"+readData.getParts(),500,250+(space*18));
+
+         graphics.drawString("Shop Suplies:",375,250+(space*19));
+         graphics.drawString("$"+readData.getShopSuplies(),500,250+(space*19));
+
+         graphics.drawString("__________________________",375,250+(space*20));
+
+         graphics.drawString("Subtotal:",375,250+(space*21));
+         graphics.drawString("$"+readData.getSubTotal(),500,250+(space*21));
+
+         graphics.drawString("tax:",375,250+(space*23));
+         graphics.drawString("$"+readData.getTax(),500,250+(space*23));
+
+         graphics.drawString("Total:",375,250+(space*25));
+         graphics.drawString("$"+readData.getTotal(),500,250+(space*25));
             return PAGE_EXISTS;
 
         }
